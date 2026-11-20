@@ -8,6 +8,7 @@ import com.eteks.sweethome3d.model.Level;
 import com.eteks.sweethome3d.model.Wall;
 import com.eteks.sweethome3d.swing.FurnitureTable;
 import com.eteks.sweethome3d.swing.PlanComponent;
+import com.eteks.sweethome3d.viewcontroller.FurnitureController;
 import com.eteks.sweethome3d.viewcontroller.HomeFurnitureController;
 import com.eteks.sweethome3d.viewcontroller.HomeView;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,7 @@ import java.awt.print.PageFormat;
 import java.awt.print.Paper;
 import java.lang.reflect.Method;
 import java.util.Comparator;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -78,6 +80,21 @@ class StudentFeaturesTest {
       volumeHeaderFound |= "Volume".equals(header);
     }
     assertTrue(volumeHeaderFound, "Task 3: the furniture table needs a Volume column");
+  }
+
+  @Test
+  void volumeColumnReturnsToItsDefaultPosition() {
+    Home home = new Home();
+    FurnitureController controller = new FurnitureController(home, null, null);
+    HomePieceOfFurniture.SortableProperty volume = sortableProperty("VOLUME");
+    List<HomePieceOfFurniture.SortableProperty> defaultProperties =
+        home.getFurnitureVisibleProperties();
+
+    controller.toggleFurnitureVisibleProperty(volume);
+    controller.toggleFurnitureVisibleProperty(volume);
+
+    assertEquals(defaultProperties, home.getFurnitureVisibleProperties(),
+        "Task 3: restoring Volume should put it back in its default column position");
   }
 
   @Test

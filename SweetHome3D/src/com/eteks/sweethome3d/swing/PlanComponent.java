@@ -2008,7 +2008,7 @@ public class PlanComponent extends JComponent implements PlanView, Scrollable, P
    * that makes it fill <code>pageFormat</code> imageable size if this attribute is <code>null</code>.
    */
   public int print(Graphics g, PageFormat pageFormat, int pageIndex) {
-    List<Selectable> printedItems = getPaintedItems(); 
+    List<Selectable> printedItems = getPaintedItems();
     Rectangle2D printedItemBounds = getItemsBounds(g, printedItems);
     if (printedItemBounds != null) {
       double imageableX = pageFormat.getImageableX();
@@ -2023,7 +2023,7 @@ public class PlanComponent extends JComponent implements PlanView, Scrollable, P
       if (this.home.getPrint() == null || this.home.getPrint().getPlanScale() == null) {
         // Compute a scale that ensures the plan will fill the component if plan scale is null
         printScale = getPrintPreferredScale(g, pageFormat) * LengthUnit.centimeterToInch(72);
-        if (pageIndex > 0) {
+        if (pageIndex > this.home.getLevels().size() - 1) {
           return NO_SUCH_PAGE;
         }
         pagesPerRow = 1;
@@ -2064,7 +2064,10 @@ public class PlanComponent extends JComponent implements PlanView, Scrollable, P
       setRenderingHints(g2D);
       try {
         // Print component contents
+        Level oldLevel = this.home.getSelectedLevel();
+        this.home.setSelectedLevel(this.home.getLevels().get(pageIndex));
         paintContent(g2D, printScale, PaintMode.PRINT);
+        this.home.setSelectedLevel(oldLevel);
       } catch (InterruptedIOException ex) {
         // Ignore exception because it may happen only in EXPORT paint mode 
       }   
